@@ -21,7 +21,7 @@ public class Pframe {
         frame.setLayout(null);
         
         // 프레임 크기 지정
-        frame.setSize(720, 480);
+        frame.setSize(1280, 720);
         
         // 종료 버튼에 동작을 할당한다.
         frame.addWindowListener(new WindowAdapter() {
@@ -31,9 +31,9 @@ public class Pframe {
         });
         
         // 컴포넌트 크기, 위치 설정
-        loadBtn.setBounds(40,400,300,40);
-        randomList.setBounds(40,80,300,300);
-        pokemonList.setBounds(380, 80, 300, 300);
+        loadBtn.setBounds(40,665,580,40);
+        randomList.setBounds(40,80,580,580);
+        pokemonList.setBounds(660, 80, 580, 580);
         testlabel.setBounds(380, 400, 300, 40);
         
         // 버튼 이벤트 세팅
@@ -47,25 +47,44 @@ public class Pframe {
                     PreparedStatement pstm = null;  // SQL 문을 나타내는 객체
                     ResultSet rs = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
                     
-                    String quary = "select * from pokemon";
                     int number = (int)(Math.random()*151) + 1;
+                    String quary = "select * from pokemon where no = " + number;
+                    String quary2 = "select * from nullpokemon";
+                    System.out.println(number);
                     
                     conn = DBConnection.getConnection();
                     pstm = conn.prepareStatement(quary);
                     rs = pstm.executeQuery();
-                    System.out.println(rs.next());
-                    // 결과를 하나씩 출력한다.
-                    while (rs.next()){
-                    	System.out.println("why");
-                    	int no = rs.getInt("no");
+                    
+                    //System.out.println(rs.next());
+                    if(rs.next()) {
+                    	System.out.println("hey");
+                        int no = rs.getInt("no");
                         String name = rs.getString("name");
                         int image = rs.getInt("image");
-                        
                         String result = no + " " + name + " " + image;
-                        System.out.println(result);
-                        pokemonList.add(result);
-//                        String str = rs.getNString(1);
-//                        pokemonList.add(str); // 리스트에 데이터를 추가한다.
+                        randomList.add(result);
+                    }
+                    
+                    System.out.println("여기");
+//                  
+                    PreparedStatement pstm2 = null;  // SQL 문을 나타내는 객체
+                    ResultSet rs2 = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
+                    
+                    pstm2 = conn.prepareStatement(quary2);
+                    rs2 = pstm2.executeQuery();
+                    
+                    System.out.println(rs2.next());
+                    // 결과를 하나씩 출력한다.
+                    while (rs2.next()){
+                    	System.out.println("ho");
+                    	int no2 = rs2.getInt("no");
+                        String name2 = rs2.getString("name");
+                        int image2 = rs2.getInt("image");
+                        
+                        String result2 = no2 + " " + name2 + " " + image2;
+                        System.out.println(result2);
+                        pokemonList.add(result2);
                     }
                 }catch(SQLException sqle){
                     System.out.println("SQLException: " + sqle.getMessage());
