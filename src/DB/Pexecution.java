@@ -5,8 +5,10 @@ public class Pexecution {
 	public static void main(String[] args) {
 		
 		Pframe frm = new Pframe();
-        frm.createFrame();
-
+        frm.init();
+        frm.start();
+		frm.createFrame();
+        
 	}
 
 }

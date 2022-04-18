@@ -1,19 +1,61 @@
 package DB;
+import java.awt.Button;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.List;
+import java.awt.Panel;
+import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Random;
 
-import java.sql.*;
-import java.awt.*;
-import java.awt.event.*;
-
+import javax.swing.JLabel;
 public class Pframe {
+	
+	int clickCount =0;
+	int price=0;
+	int totalMoney=0;
+	int ranNo=0;
+	
 
 	// 프레임 객체 설정
     Frame frame = new Frame("Pokemon씰 랜덤 생성기");
     
     // 버튼, 리스트 컨트롤 선언
     List randomList = new List();
-    List pokemonList = new List();
-    Label testlabel = new Label();
+    Panel pokemonList = new Panel();
+    Label testlabel = new Label(totalMoney+"원");
     Button loadBtn = new Button("Pokemon씰 뽑기");
+    ScrollPane sp = new ScrollPane();
+    
+    
+    Panel pCenter = new Panel ();
+	GridLayout gl151= new GridLayout(5,30);
+
+	Panel pls [] =new Panel[151];
+	
+	JLabel lbsImage [] =new JLabel[151];
+	Label lbsNo [] =new Label[151];
+	Label lbsName [] =new Label[151];
+	
+	
+	GridLayout gl3= new GridLayout(3,1,5,5);
+	
+	
+	public int getRanNo() {
+		return ranNo;
+	}
+	public void setRanNo(int ranNo) {
+		this.ranNo = ranNo;
+	}
+	public static final int totalAmount =151;
+	
     
     public void createFrame()
     {
@@ -34,7 +76,9 @@ public class Pframe {
         loadBtn.setBounds(40,665,580,40);
         randomList.setBounds(40,80,580,580);
         pokemonList.setBounds(660, 80, 580, 580);
-        testlabel.setBounds(380, 400, 300, 40);
+        testlabel.setBounds(100, 600, 300, 40); //<<<<위치조정 필요함 7시로
+        sp.setPreferredSize(new Dimension(200, 100));
+        
         
         // 버튼 이벤트 세팅
         loadBtn.addActionListener(new ActionListener(){
@@ -102,4 +146,85 @@ public class Pframe {
         //프레임 보이기
         frame.setVisible(true);
     }
+    
+public void init () {
+		
+		/*
+		this.setLayout(bl);
+		
+		
+		p1.setLayout(gl1);
+		
+		p1.add(bt2);
+		p1.add(lb_S1);
+		p1.add(lb_S2);
+		
+		this.add("South",p1);
+		*/
+		
+		pCenter.setLayout(gl151);
+		
+		
+		
+		for(int i=0;i<totalAmount;i++) {
+			int iDisp=i+1;
+			pls[i]=new Panel();
+			
+			lbsImage[i]=new JLabel("apple");
+			lbsImage[i].setSize(100, 600);
+			lbsNo[i]=new Label(""+iDisp);
+			lbsName[i]=new Label("미확인명");
+			
+			//System.out.println("새 패널 생성"+i);
+		
+			pls[i].setLayout(gl3);
+			pls[i].add(lbsImage[i]);
+			pls[i].add(lbsNo[i]);
+			pls[i].add(lbsName[i]);
+			
+			
+			
+			pCenter.add(pls[i]);
+			System.out.println("pCenter add"+i);
+		}
+		sp.add(pCenter);
+		
+		pokemonList.add(sp);
+		
+	}
+
+
+
+public void start () {   
+	MouseAdapter ma =new MouseAdapter() { //유사한 익명이너클래스내용
+		
+		public void mouseClicked(MouseEvent e ) {
+			int price= 1500;
+			
+			
+			
+			clickCount++;
+			totalMoney=price*clickCount;
+		//	System.out.println(clickCount+" "+totalMoney);
+			testlabel.setText(totalMoney+"원");
+			
+			
+			
+			/////////////////////////////////
+			Random ran =new Random();
+			int n=ran.nextInt(totalAmount-1)+1;
+
+			
+			setRanNo(n);
+			
+			
+			//System.out.println(getRanNo());
+			
+		//System.exit(0);
+		
+		}
+	};
+	loadBtn.addMouseListener(ma);
+}
+
 }
