@@ -91,44 +91,58 @@ public class Pframe {
                     PreparedStatement pstm = null;  // SQL 문을 나타내는 객체
                     ResultSet rs = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
                     
+                    PreparedStatement pstm2 = null;  // SQL 문을 나타내는 객체
+                    
+                    PreparedStatement pstm3 = null;  // SQL 문을 나타내는 객체
+                    ResultSet rs3 = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
+                    
                     int number = (int)(Math.random()*151) + 1;
                     String quary = "select * from pokemon where no = " + number;
-                    String quary2 = "select * from nullpokemon";
+                    String quary2 = "update nullpokemon set name = ?, image = ? where no = ?";
+                    String quary3 = "select * from nullpokemon";
                     System.out.println(number);
                     
                     conn = DBConnection.getConnection();
                     pstm = conn.prepareStatement(quary);
                     rs = pstm.executeQuery();
                     
+                    pstm2 = conn.prepareStatement(quary2);
+                    
                     //System.out.println(rs.next());
                     if(rs.next()) {
-                    	System.out.println("hey");
+                    	//System.out.println("hey");
                         int no = rs.getInt("no");
                         String name = rs.getString("name");
                         int image = rs.getInt("image");
-                        String result = no + " " + name + " " + image;
+                        String result = no + " " + name;
+                        
+                        pstm2.setString(1, name);
+                        pstm2.setInt(2, image);
+                        pstm2.setInt(3, no);
+                        
                         randomList.add(result);
+                        randomList.add("images\\" + number + ".webp");
                     }
                     
-                    System.out.println("여기");
-//                  
-                    PreparedStatement pstm2 = null;  // SQL 문을 나타내는 객체
-                    ResultSet rs2 = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
+                    int rs2 = pstm2.executeUpdate();
+                    //System.out.println(rs2);
                     
-                    pstm2 = conn.prepareStatement(quary2);
-                    rs2 = pstm2.executeQuery();
+                    pstm3 = conn.prepareStatement(quary3);
+                    rs3 = pstm3.executeQuery();
                     
-                    System.out.println(rs2.next());
+                    
+                    //System.out.println(rs3.next());
                     // 결과를 하나씩 출력한다.
-                    while (rs2.next()){
-                    	System.out.println("ho");
-                    	int no2 = rs2.getInt("no");
-                        String name2 = rs2.getString("name");
-                        int image2 = rs2.getInt("image");
+                    while (rs3.next()){
+                    	//System.out.println("ho");
+                    	int no = rs3.getInt("no");
+                        String name = rs3.getString("name");
+                        int image = rs3.getInt("image");
                         
-                        String result2 = no2 + " " + name2 + " " + image2;
-                        System.out.println(result2);
-                        pokemonList.add(result2);
+                        String result = no + " " + name + " " + image;
+                        System.out.println(result);
+                        pokemonList.add(result);
+                        pokemonList.add("images\\" + image + ".webp");
                     }
                 }catch(SQLException sqle){
                     System.out.println("SQLException: " + sqle.getMessage());
